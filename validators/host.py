@@ -1,9 +1,4 @@
-"""
-Needs package python3-dns
-"""
-
 import DNS
-import time
 
 from .base import EmailAddressValidator
 
@@ -14,16 +9,12 @@ def get_mxrecords(domain):
     return reply and reply.answers or []
 
 
-def get_mxrecords_dummy(domain):
-    time.sleep(.5)
-    return []
-
-
 class HostValidator(EmailAddressValidator):
+    """Checks whether or not the domain of an email address has a valid MX record."""
 
     def validate(self, email):
         domain = email.split('@')[1]
-        mxrecords = get_mxrecords_dummy(domain)
+        mxrecords = get_mxrecords(domain)
         if len(mxrecords) == 0:
             raise ValueError('Cannot find MX records for {}'.format(domain))
         return True
